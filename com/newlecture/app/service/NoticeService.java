@@ -13,15 +13,21 @@ import java.util.List;
 import com.newlecture.app.entity.Notice;
 
 public class NoticeService {
+	private String url = "jdbc:oracle:thin:@localhost:1521/xepdb1"; //url은 공통으로 하나만 만들어도 되지만
+	private String uid = "NEWLEC";
+	private String pwd = "1234";
+	private String driver = "oracle.jdbc.driver.OracleDriver";
+	
 	public List<Notice> getList() throws ClassNotFoundException, SQLException{ //List로 가져올 속성값들(컬럼명 id, title, writerId 등등)
 		//이것들을 가져오려면 List보다 큰 개념의 무언가가 필요하다.
 		//그게 바로 app.entity의 Notice.java이다.
 		
-		String url = "jdbc:oracle:thin:@localhost:1521/xepdb1";
+		
 		String sql = "SELECT * FROM NOTICE";
 		
-		Class.forName("oracle.jdbc.driver.OracleDriver");
-		Connection con = DriverManager.getConnection(url, "NEWLEC","1234");
+		Class.forName(driver);
+		//con, st, rs 같은 것들은 매 쿼리문 마다 생성 되어야 한다.
+		Connection con = DriverManager.getConnection(url, uid, pwd);
 		Statement st = con.createStatement();
 		ResultSet rs = st.executeQuery(sql);
 		
@@ -78,8 +84,8 @@ public class NoticeService {
 				 "files" +
 				 ")VALUES (?,?,?,?)";
 		
-		Class.forName("oracle.jdbc.driver.OracleDriver");
-		Connection con = DriverManager.getConnection(url, "NEWLEC","1234");
+		Class.forName(driver);
+		Connection con = DriverManager.getConnection(url, uid, pwd);
 		//Statement st = con.createStatement();
 		PreparedStatement st = con.prepareStatement(sql);
 		st.setNString(1, title); //values는 index가 1번부터 시작한다.
@@ -90,20 +96,17 @@ public class NoticeService {
 		int result = st.executeUpdate(); //preparestatment는 이미 안에 sql문이 있어서 다시 sql문을 보내면 error발생
 		//그리고 이 동작은 데이터베이스조작이므로 Update
 		
-		System.out.println(result);
-		
 		st.close();
 		con.close();
 		return result;
 	}
 	
-	public int update(Notice notice) {
-		public static void main(String[] args) throws ClassNotFoundException, SQLException {
+	public int update(Notice notice) throws ClassNotFoundException, SQLException{
 			
-			String title = "TEST4";
-			String content = "hahaha33";
-			String files = "";
-			int id = 73;
+			String title = notice.getTitle();
+			String content = notice.getContent();
+			String files = notice.getFiles();
+			int id = notice.getId();
 			
 			//update notice 뒤에 공백을 하나 붙여 줘야 SET이 바로 notice 뒤에 붙지 못한다.
 			String url = "jdbc:oracle:thin:@localhost:1521/xepdb1";
@@ -114,8 +117,8 @@ public class NoticeService {
 					"    files=?" + 
 					"where id =?";
 			
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			Connection con = DriverManager.getConnection(url, "NEWLEC","1234");
+			Class.forName(driver);
+			Connection con = DriverManager.getConnection(url, uid, pwd);
 			//Statement st = con.createStatement();
 			PreparedStatement st = con.prepareStatement(sql);
 			st.setNString(1, title); //values는 index가 1번부터 시작한다.
@@ -126,15 +129,31 @@ public class NoticeService {
 			int result = st.executeUpdate(); //preparestatment는 이미 안에 sql문이 있어서 다시 sql문을 보내면 error발생
 			//그리고 이 동작은 데이터베이스조작이므로 Update
 			
-			System.out.println(result);
 			
 			st.close();
 			con.close();
-		return 0;
+			return result;
 	}
 	
-	public int delete(int id) {
-		return 0;
+	public int delete(int id) throws ClassNotFoundException, SQLException {
+		
+		
+		//update notice 뒤에 공백을 하나 붙여 줘야 SET이 바로 notice 뒤에 붙지 못한다.
+		String url = "jdbc:oracle:thin:@localhost:1521/xepdb1";
+		String sql = "DELETE NOTICE where id =?";
+		
+		Class.forName(driver);
+		Connection con = DriverManager.getConnection(url, uid, pwd);
+		//Statement st = con.createStatement();
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setInt(1, id);
+	
+		int result = st.executeUpdate(); //preparestatment는 이미 안에 sql문이 있어서 다시 sql문을 보내면 error발생
+		//그리고 이 동작은 데이터베이스조작이므로 Update
+		
+		st.close();
+		con.close();
+		return result;
 	}
 
 }
