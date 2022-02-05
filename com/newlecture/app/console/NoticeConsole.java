@@ -2,6 +2,7 @@ package com.newlecture.app.console;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Scanner;
 
 import com.newlecture.app.entity.Notice;
 import com.newlecture.app.service.NoticeService;
@@ -32,7 +33,15 @@ public class NoticeConsole {
 
 	public int inputNoticeMenu() {
 		
-		return 0;
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.printf("1.상세조회/ 2.이전/ 3.다음/ 4.글쓰기/ 5.종료 >");
+		String menu_ = scan.nextLine(); //꼭 숫자가 아니더라도 문자가 입력될 수 있으므로 String 값으로 받는다.
+		int menu = Integer.parseInt(menu_);
+		
+		return menu;
+		
+		/*SELECT * FROM (SELECT ROWNUM NUM, N.* FROM(SELECT * FROM NOTICE ORDER BY REGDATE DESC) N) WHERE NUM BETWEEN 1 AND 10;*/
 	}
 
 }
