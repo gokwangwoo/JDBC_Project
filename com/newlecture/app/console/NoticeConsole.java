@@ -16,9 +16,7 @@ public class NoticeConsole {
 	}
 	
 	public void printNoticeList() throws ClassNotFoundException, SQLException {
-		List<Notice> list = service.getList();
-		
-		
+		List<Notice> list = service.getList(1);
 		
 		System.out.println("────────────────────────────────────");
 		System.out.printf("<공지사항> 총 %d 게시글\n", 12);
@@ -41,7 +39,6 @@ public class NoticeConsole {
 		
 		return menu;
 		
-		/*SELECT * FROM (SELECT ROWNUM NUM, N.* FROM(SELECT * FROM NOTICE ORDER BY REGDATE DESC) N) WHERE NUM BETWEEN 1 AND 10;*/
 	}
 
 }

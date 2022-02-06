@@ -18,18 +18,25 @@ public class NoticeService {
 	private String pwd = "1234";
 	private String driver = "oracle.jdbc.driver.OracleDriver";
 	
-	public List<Notice> getList() throws ClassNotFoundException, SQLException{ //List로 가져올 속성값들(컬럼명 id, title, writerId 등등)
+	public List<Notice> getList(int page) throws ClassNotFoundException, SQLException{ //List로 가져올 속성값들(컬럼명 id, title, writerId 등등)
 		//이것들을 가져오려면 List보다 큰 개념의 무언가가 필요하다.
 		//그게 바로 app.entity의 Notice.java이다.
 		
+		int start = 1 + (page-1)*10; // 1, 11, 21, 21 ....
+		int end = 10*page; // 10, 20, 30, 40 ....
 		
-		String sql = "SELECT * FROM NOTICE";
+		
+		String sql = "SELECT * FROM "
+				+ "(SELECT ROWNUM NUM, N.* FROM(SELECT * FROM NOTICE ORDER BY REGDATE DESC) N) "
+				+ "WHERE NUM BETWEEN ? AND ?";
 		
 		Class.forName(driver);
 		//con, st, rs 같은 것들은 매 쿼리문 마다 생성 되어야 한다.
 		Connection con = DriverManager.getConnection(url, uid, pwd);
-		Statement st = con.createStatement();
-		ResultSet rs = st.executeQuery(sql);
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setInt(1, start);
+		st.setInt(2, end);
+		ResultSet rs = st.executeQuery();
 		
 		//전달받은 Notice를 반환하는 준비
 		List<Notice> list = new ArrayList<Notice>();
@@ -109,6 +116,7 @@ public class NoticeService {
 			int id = notice.getId();
 			
 			//update notice 뒤에 공백을 하나 붙여 줘야 SET이 바로 notice 뒤에 붙지 못한다.
+			
 			String url = "jdbc:oracle:thin:@localhost:1521/xepdb1";
 			String sql = "update notice " + 
 					"SET" + 
