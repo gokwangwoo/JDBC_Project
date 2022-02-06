@@ -26,9 +26,7 @@ public class NoticeService {
 		int end = 10*page; // 10, 20, 30, 40 ....
 		
 		
-		String sql = "SELECT * FROM "
-				+ "(SELECT ROWNUM NUM, N.* FROM(SELECT * FROM NOTICE ORDER BY REGDATE DESC) N) "
-				+ "WHERE NUM BETWEEN ? AND ?";
+		String sql = "select * from NOTICE_VIEW where NUM between ? and ?"; //이제 view를 만들어서 NOTICE_VIEW를 통해서 이미 정렬된 데이터를 뽑게 했다.
 		
 		Class.forName(driver);
 		//con, st, rs 같은 것들은 매 쿼리문 마다 생성 되어야 한다.
