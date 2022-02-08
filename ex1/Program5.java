@@ -7,9 +7,8 @@ import com.newlecture.app.console.NoticeConsole;
 public class Program5 {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		
-		
-		NoticeConsole console = new NoticeConsole();
+		NoticeConsole console = new NoticeConsole();//페이지 정보는 NoticeConsole이 가지고 있는게 더 낳을 것 같다.
+		//int page;
 		
 		EXIT:
 			while(true) {
@@ -20,8 +19,12 @@ public class Program5 {
 					case 1: //상세조회
 						break;
 					case 2: //이전
+						console.movePrevList();
+						//page--;
 						break;
 					case 3: //다음
+						console.moveNextList();
+						//dpage++;
 						break;
 					case 4: //글쓰기
 						System.out.println("4번 선택");
