@@ -12,17 +12,20 @@ public class NoticeConsole {
 	private NoticeService service;
 	//페이지 정보를 나타내는 상태 변수 page 추가
 	private int page;
+	private int count;
 	
 	public NoticeConsole() {
 		service = new NoticeService();
 		page = 1; //페이지 기본 값은 1
+		count = 0;
 	}
 	
 	public void printNoticeList() throws ClassNotFoundException, SQLException {
 		List<Notice> list = service.getList(page);
+		count = service.getCount();
 		
 		System.out.println("────────────────────────────────────");
-		System.out.printf("<공지사항> 총 %d 게시글\n", 12);
+		System.out.printf("<공지사항> 총 %d 게시글\n", count);
 		System.out.println("────────────────────────────────────");
 		//System.out.printf("12. 안녕하세요 / newlec / 2015-07-12, args); 이렇게 되어야 하므로
 		for (Notice n : list) {

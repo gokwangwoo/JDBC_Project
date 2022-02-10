@@ -73,6 +73,34 @@ public class NoticeService {
 		
 		return list;
 	}
+	//이렇게 총 몇개의 게시물이 있는지 단일 값을 얻어오는 것을
+	//Scalar 값을 얻어온다고 한다.
+	public int getCount() throws ClassNotFoundException, SQLException {
+		int count = 0;
+		
+		String sql = "select COUNT(ID) AS COUNT from NOTICE"; //select 문을 통해서 데이터를 뽑는다.
+		
+		Class.forName(driver);
+		//con, st, rs 같은 것들은 매 쿼리문 마다 생성 되어야 한다.
+		Connection con = DriverManager.getConnection(url, uid, pwd);
+		Statement st = con.createStatement();
+
+		ResultSet rs = st.executeQuery(sql); //result set으로 받는건 단일 값 하나로 된 값을 받는 것이다.
+		
+		
+		if(rs.next())
+			count = rs.getInt("COUNT");
+			
+		
+		
+		rs.close();
+		st.close();
+		con.close();
+		
+		return count;
+		
+	}
+
 
 	public int insert(Notice notice) throws SQLException, ClassNotFoundException {
 		
@@ -161,5 +189,6 @@ public class NoticeService {
 		con.close();
 		return result;
 	}
+
 
 }
