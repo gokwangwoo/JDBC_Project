@@ -10,19 +10,21 @@ import com.newlecture.app.service.NoticeService;
 public class NoticeConsole {
 
 	private NoticeService service;
-	//페이지 정보를 나타내는 상태 변수 page 추가
 	private int page;
-	private int count;
+	
+	
 	
 	public NoticeConsole() {
 		service = new NoticeService();
 		page = 1; //페이지 기본 값은 1
-		count = 0;
+		
 	}
 	
 	public void printNoticeList() throws ClassNotFoundException, SQLException {
 		List<Notice> list = service.getList(page);
-		count = service.getCount();
+		int count = service.getCount(); // 페이지 값은 매번 달라져야 하므로 지역변수가 되어야 한다.
+		int lastPage = count/10; //
+		lastPage = count%10 > 0?lastPage+1:lastPage;
 		
 		System.out.println("────────────────────────────────────");
 		System.out.printf("<공지사항> 총 %d 게시글\n", count);
@@ -32,7 +34,7 @@ public class NoticeConsole {
 			System.out.printf("%d. %s / %s / %s\n", n.getId(), n.getTitle(), n.getWriterId(), n.getRegDate());
 		}
 		System.out.println("────────────────────────────────────");
-		System.out.printf("          %d/%d pages\n", 1, 2);
+		System.out.printf("          %d/%d pages\n", page, lastPage);
 	}
 
 	public int inputNoticeMenu() {
@@ -47,16 +49,32 @@ public class NoticeConsole {
 		
 	}
 
-	public void movePrevList() {
+	public void movePrevList() throws ClassNotFoundException, SQLException {
+		int count = service.getCount(); //지역 변수로 쓰기 위해서 이것들을 가져온다.
+		int lastPage = count/10; //
+		lastPage = count%10 > 0?lastPage+1:lastPage;
+		
 		if(page == 1) {
+			System.out.println("=================");
 			System.out.println("이전 페이지가 없습니다.");
-			return ;
+			System.out.println("=================");
+			return;
 		}
 		page--;
 		
 	}
 
-	public void moveNextList() {
+	public void moveNextList() throws ClassNotFoundException, SQLException {
+		int count = service.getCount(); //지역 변수로 쓰기 위해서 이것들을 가져온다.
+		int lastPage = count/10; //
+		lastPage = count%10 > 0?lastPage+1:lastPage;
+		
+		if(page == lastPage) {
+			System.out.println("=================");
+			System.out.println("이후 페이지가 없습니다.");
+			System.out.println("=================");
+			return;
+		}
 		page++;
 		
 	}
