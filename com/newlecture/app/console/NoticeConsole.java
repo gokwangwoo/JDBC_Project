@@ -11,12 +11,16 @@ public class NoticeConsole {
 
 	private NoticeService service;
 	private int page;
+	private String searchWord;
+	private String searchField;
 	
 	
 	
 	public NoticeConsole() {
 		service = new NoticeService();
 		page = 1; //페이지 기본 값은 1
+		searchWord = "";
+		searchField = "";
 		
 	}
 	
@@ -41,7 +45,7 @@ public class NoticeConsole {
 		
 		Scanner scan = new Scanner(System.in);
 		
-		System.out.printf("1.상세조회/ 2.이전/ 3.다음/ 4.글쓰기/ 5.종료 >");
+		System.out.printf("1.상세조회/ 2.이전/ 3.다음/ 4.글쓰기/ 5.검색/  6.종료 >");
 		String menu_ = scan.nextLine(); //꼭 숫자가 아니더라도 문자가 입력될 수 있으므로 String 값으로 받는다.
 		int menu = Integer.parseInt(menu_);
 		
@@ -76,6 +80,17 @@ public class NoticeConsole {
 			return;
 		}
 		page++;
+		
+	}
+
+	public void inputSearchWord() {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("검색 범주(title/content/writerId)중에 하나를 입력하세요.");
+		System.out.print(" > ");
+		searchField = scan.nextLine();//검색 범주(제목, 작성자 등)을 받는 입력값
+		//검색할 값을 받는 searchWord는 공유하는 변수로 만드는게 좋다.
+		System.out.print("검색어 > ");
+		searchWord = scan.nextLine();
 		
 	}
 

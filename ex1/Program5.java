@@ -29,7 +29,10 @@ public class Program5 {
 					case 4: //글쓰기
 						System.out.println("4번 선택");
 						break;
-					case 5: //종료
+					case 5: //검색
+						console.inputSearchWord();
+						break;
+					case 6: //종료
 						System.out.println("Bye~~");
 						break EXIT; //라벨 문 활용
 					default:
