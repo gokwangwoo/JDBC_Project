@@ -20,12 +20,12 @@ public class NoticeConsole {
 		service = new NoticeService();
 		page = 1; //페이지 기본 값은 1
 		searchWord = "";
-		searchField = "";
+		searchField = "TITLE";
 		
 	}
 	
 	public void printNoticeList() throws ClassNotFoundException, SQLException {
-		List<Notice> list = service.getList(page);
+		List<Notice> list = service.getList(page, searchField, searchWord);
 		int count = service.getCount(); // 페이지 값은 매번 달라져야 하므로 지역변수가 되어야 한다.
 		int lastPage = count/10; //
 		lastPage = count%10 > 0?lastPage+1:lastPage;
@@ -93,5 +93,6 @@ public class NoticeConsole {
 		searchWord = scan.nextLine();
 		
 	}
+
 
 }

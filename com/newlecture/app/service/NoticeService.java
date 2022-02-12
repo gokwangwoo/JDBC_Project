@@ -18,7 +18,11 @@ public class NoticeService {
 	private String pwd = "1234";
 	private String driver = "oracle.jdbc.driver.OracleDriver";
 	
-	public List<Notice> getList(int page) throws ClassNotFoundException, SQLException{ //List로 가져올 속성값들(컬럼명 id, title, writerId 등등)
+	
+	//2.검색하는 필드(title, writerid, id 등등)를 표시하는 field
+	//2.query는 검색하는 쿼리 정보를 가져오는 값
+	public List<Notice> getList(int page, String field, String query) throws ClassNotFoundException, SQLException{ //List로 가져올 속성값들(컬럼명 id, title, writerId 등등)
+		
 		//이것들을 가져오려면 List보다 큰 개념의 무언가가 필요하다.
 		//그게 바로 app.entity의 Notice.java이다.
 		
@@ -26,14 +30,17 @@ public class NoticeService {
 		int end = 10*page; // 10, 20, 30, 40 ....
 		
 		
-		String sql = "select * from NOTICE_VIEW where NUM between ? and ?"; //이제 view를 만들어서 NOTICE_VIEW를 통해서 이미 정렬된 데이터를 뽑게 했다.
+		String sql = "select * from NOTICE_VIEW where "+field+" LIKE ? AND NUM between ? and ?"; //이제 view를 만들어서 NOTICE_VIEW를 통해서 이미 정렬된 데이터를 뽑게 했다.
+		//위의 getList의 field값을 가져와서 where절 뒤에 넣어야 하기 때문에  "+field+"을 넣어준다.
 		
 		Class.forName(driver);
 		//con, st, rs 같은 것들은 매 쿼리문 마다 생성 되어야 한다.
 		Connection con = DriverManager.getConnection(url, uid, pwd);
 		PreparedStatement st = con.prepareStatement(sql);
-		st.setInt(1, start);
-		st.setInt(2, end);
+		//setString은 위의 sql문의 ?마다 들어가는 값
+		st.setString(1, "%"+query+"%");
+		st.setInt(2, start);
+		st.setInt(3, end);
 		ResultSet rs = st.executeQuery();
 		
 		//전달받은 Notice를 반환하는 준비
